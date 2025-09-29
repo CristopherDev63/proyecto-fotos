@@ -1,0 +1,133 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-size: 30px;
+    font-family: sans-serif;
+}
+
+.mural {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.mural img {
+    display: block;
+    height: auto;
+    flex-shrink: 1;
+    object-fit: cover;
+}
+
+/* PC - sin restricciones especiales */
+@media (min-width: 769px) {
+    .mural img {
+        max-width: 100vw;
+        min-width: 300px;
+        min-height: 200px;
+    }
+}
+
+/* Tablets */
+@media (max-width: 768px) and (min-width: 481px) {
+    .mural img {
+        max-width: 50vw;
+        min-width: 180px;
+        min-height: 160px;
+        width: auto;
+    }
+    h1 {
+        font-size: 60px;
+    } 
+
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+    .mural img {
+        max-width: 50vw;
+        min-width: 140px;
+        min-height: 120px;
+        width: auto;
+    }
+
+    .mural img:only-child,
+    .mural img:last-child:nth-child(odd) {
+        max-width: 100vw;
+        min-width: 200px;
+        min-height: 160px;
+    }
+    h1 {
+        font-size: 60px;
+    } 
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 320px) {
+    .mural img {
+        min-width: 120px;
+        min-height: 100px;
+    }
+
+    .mural img:only-child,
+    .mural img:last-child:nth-child(odd) {
+        min-width: 160px;
+        min-height: 130px;
+    }
+}
+
+.Titulo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px
+}
+
+.anuncion{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+.filtro-btn {
+    background-color: #f0f0f0;
+    border: 2px solid #ddd;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.filtro-btn:hover {
+    background-color: #e0e0e0;
+    border-color: #bbb;
+}
+
+.filtro-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+@media (max-width: 768px) {
+    .filtros {
+        gap: 8px;
+        margin: 15px 0;
+        padding: 0 10px;
+    }
+
+    .filtro-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}

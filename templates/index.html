@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="Titulo"><h1>Mural UVPM</h1></div>
+    <div class="anuncion"><p><b>¿Quieres agregar tu fotografia al mural?</b> Contactate con nosotros al numero  <b>+52 597 103 2819</b></p></div>
+
+    <div class="filtros">
+        <button class="filtro-btn active" data-categoria="todas">Todas</button>
+        <button class="filtro-btn" data-categoria="lugares">Lugares</button>
+        <button class="filtro-btn" data-categoria="carreras">Carreras</button>
+        <button class="filtro-btn" data-categoria="areas-trabajo">Áreas de Trabajo</button>
+        <button class="filtro-btn" data-categoria="pasatiempos">Pasatiempos</button>
+        <button class="filtro-btn" data-categoria="deportes">Deportes</button>
+        <button class="filtro-btn" data-categoria="tics">TICs</button>
+        <button class="filtro-btn" data-categoria="enfermeria">Enfermería</button>
+        <button class="filtro-btn" data-categoria="ing-alimentos">Ing. Alimentos</button>
+        <button class="filtro-btn" data-categoria="ing-administracion">Ing. Administración</button>
+        <button class="filtro-btn" data-categoria="ing-mecatronica">Ing. Mecatrónica</button>
+        <button class="filtro-btn" data-categoria="ing-logistica">Ing. Logística</button>
+        <button class="filtro-btn" data-categoria="ing-nanotec">Ing. Nanotec</button>
+        <button class="filtro-btn" data-categoria="sin-categoria">Sin Categoría</button>
+    </div>
+
+    <div class="mural">
+        {% if mural_images %}
+            {% for image in mural_images %}
+                <img src="{{ url_for('static', filename=image.filepath) }}"
+                     width="{{ image.width }}"
+                     height="{{ image.height }}"
+                     data-categoria="{{ image.categoria }}"
+                     class="imagen-mural">
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <script>
+        // Función para filtrar imágenes por categoría
+        function filtrarImagenes(categoria) {
+            const imagenes = document.querySelectorAll('.imagen-mural');
+            const botones = document.querySelectorAll('.filtro-btn');
+
+            // Actualizar botones activos
+            botones.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-categoria="${categoria}"]`).classList.add('active');
+
+            // Mostrar/ocultar imágenes
+            imagenes.forEach(img => {
+                if (categoria === 'todas' || img.dataset.categoria === categoria) {
+                    img.style.display = 'block';
+                } else {
+                    img.style.display = 'none';
+                }
+            });
+        }
+
+        // Agregar event listeners a los botones
+        document.addEventListener('DOMContentLoaded', function() {
+            const botones = document.querySelectorAll('.filtro-btn');
+            botones.forEach(boton => {
+                boton.addEventListener('click', function() {
+                    const categoria = this.dataset.categoria;
+                    filtrarImagenes(categoria);
+                });
+            });
+        });
+    </script>
+</body>
+</html>     
