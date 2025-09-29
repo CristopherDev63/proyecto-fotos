@@ -67,7 +67,7 @@ def generate_random_sizes(images, is_mobile=False):
 @app.route('/')
 def index():
     # Escanear automáticamente por nuevas imágenes antes de mostrar el mural
-    gallery.auto_refresh_images()
+    # gallery.auto_refresh_images()
 
     # Forzar recarga completa de imágenes desde la base de datos
     gallery.reload_images()
