@@ -5,7 +5,7 @@ from typing import List, Optional
 class ImageDatabase:
     def __init__(self, db_path: str = "images.db"):
         self.db_path = db_path
-        self.init_database()
+        # self.init_database()
 
     def init_database(self):
         """Inicializa la base de datos y crea la tabla de imágenes si no existe"""
