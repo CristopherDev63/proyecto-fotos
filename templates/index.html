@@ -1,72 +1,69 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="Titulo"><h1>Mural UVPM</h1></div>
-    <div class="anuncion"><p><b>¿Quieres agregar tu fotografia al mural?</b> Contactate con nosotros al numero  <b>+52 597 103 2819</b></p></div>
+{# Hereda de la plantilla base. #}
+{% extends "base.html" %}
 
-    <div class="filtros">
-        <button class="filtro-btn active" data-categoria="todas">Todas</button>
-        <button class="filtro-btn" data-categoria="lugares">Lugares</button>
-        <button class="filtro-btn" data-categoria="carreras">Carreras</button>
-        <button class="filtro-btn" data-categoria="areas-trabajo">Áreas de Trabajo</button>
-        <button class="filtro-btn" data-categoria="pasatiempos">Pasatiempos</button>
-        <button class="filtro-btn" data-categoria="deportes">Deportes</button>
-        <button class="filtro-btn" data-categoria="tics">TICs</button>
-        <button class="filtro-btn" data-categoria="enfermeria">Enfermería</button>
-        <button class="filtro-btn" data-categoria="ing-alimentos">Ing. Alimentos</button>
-        <button class="filtro-btn" data-categoria="ing-administracion">Ing. Administración</button>
-        <button class="filtro-btn" data-categoria="ing-mecatronica">Ing. Mecatrónica</button>
-        <button class="filtro-btn" data-categoria="ing-logistica">Ing. Logística</button>
-        <button class="filtro-btn" data-categoria="ing-nanotec">Ing. Nanotec</button>
-        <button class="filtro-btn" data-categoria="sin-categoria">Sin Categoría</button>
+{# Define el título de la página. #}
+{% block title %}Collage Universitario{% endblock %}
+
+{# Agrega estilos CSS específicos para esta página. #}
+{% block styles %}
+<style>
+    /* Estilos para la galería de imágenes. */
+    .galeria {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 15px; /* Espacio entre las imágenes. */
+    }
+
+    /* Contenedor de cada imagen. */
+    .imagen-contenedor {
+        border: 1px solid #ddd; /* Borde simple. */
+        border-radius: 5px; /* Bordes redondeados. */
+        padding: 10px;
+        text-align: center;
+    }
+
+    .imagen-contenedor img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover; /* Asegura que la imagen cubra el espacio sin deformarse. */
+    }
+
+    /* Mensaje que se muestra si no hay imágenes. */
+    .mensaje-vacio {
+        text-align: center;
+        padding: 40px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+
+{# Contenido principal de la página. #}
+{% block content %}
+    <div class="text-center mb-4">
+        <h1>Collage Universitario</h1>
+        <p>Total de imágenes: {{ total }}</p>
     </div>
 
-    <div class="mural">
-        {% if mural_images %}
-            {% for image in mural_images %}
-                <img src="{{ url_for('static', filename=image.filepath) }}"
-                     width="{{ image.width }}"
-                     height="{{ image.height }}"
-                     data-categoria="{{ image.categoria }}"
-                     class="imagen-mural">
+    {# Comprueba si hay imágenes para mostrar. #}
+    {% if imagenes %}
+        <div class="galeria">
+            {# Bucle para recorrer cada imagen en la lista de imágenes. #}
+            {% for imagen in imagenes %}
+                <div class="imagen-contenedor">
+                    <img src="{{ url_for('static', filename='images/' + imagen.filename) }}" alt="{{ imagen.filename }}">
+                    <hr>
+                    <p><strong>{{ imagen.filename }}</strong></p>
+                    <p><small>Subida por: {{ imagen.author.username }}</small></p>
+                </div>
             {% endfor %}
-        {% endif %}
-    </div>
+        </div>
+    {# Si no hay imágenes, muestra un mensaje. #}
+    {% else %}
+        <div class="mensaje-vacio">
+            <h2>No hay imágenes todavía.</h2>
+            <p>¡Sé el primero en subir una!</p>
+        </div>
+    {% endif %}
+{% endblock %}
 
-    <script>
-        // Función para filtrar imágenes por categoría
-        function filtrarImagenes(categoria) {
-            const imagenes = document.querySelectorAll('.imagen-mural');
-            const botones = document.querySelectorAll('.filtro-btn');
-
-            // Actualizar botones activos
-            botones.forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`[data-categoria="${categoria}"]`).classList.add('active');
-
-            // Mostrar/ocultar imágenes
-            imagenes.forEach(img => {
-                if (categoria === 'todas' || img.dataset.categoria === categoria) {
-                    img.style.display = 'block';
-                } else {
-                    img.style.display = 'none';
-                }
-            });
-        }
-
-        // Agregar event listeners a los botones
-        document.addEventListener('DOMContentLoaded', function() {
-            const botones = document.querySelectorAll('.filtro-btn');
-            botones.forEach(boton => {
-                boton.addEventListener('click', function() {
-                    const categoria = this.dataset.categoria;
-                    filtrarImagenes(categoria);
-                });
-            });
-        });
-    </script>
-</body>
-</html>     

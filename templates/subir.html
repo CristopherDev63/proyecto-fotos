@@ -1,0 +1,34 @@
+{# Hereda de la plantilla base. #}
+{% extends "base.html" %}
+
+{# Define el título de la página. #}
+{% block title %}Subir Foto{% endblock %}
+
+{# Contenido principal de la página. #}
+{% block content %}
+    <h2>Subir una Nueva Foto</h2>
+    <p>Selecciona un archivo de imagen de tu computador para subirlo a la galería.</p>
+
+    <!--
+      Formulario para subir archivos.
+      - method="POST": El método HTTP para enviar los datos.
+      - enctype="multipart/form-data": Esencial para que los formularios puedan subir archivos.
+    -->
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="archivo">Selecciona una imagen:</label>
+            <!--
+              Input de tipo "file" para seleccionar archivos.
+              - accept: Limita los tipos de archivo que se pueden seleccionar.
+            -->
+            <input type="file" class="form-control-file" id="archivo" name="archivo" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Subir Foto</button>
+    </form>
+
+    <div class="mt-4">
+        <p><strong>Formatos permitidos:</strong> PNG, JPG, JPEG, GIF, WEBP</p>
+        <p><strong>Tamaño máximo:</strong> 16 MB</p>
+    </div>
+{% endblock %}
+
