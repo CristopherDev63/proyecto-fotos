@@ -1,0 +1,71 @@
+<!-- Plantilla base de la que heredarán todas las demás páginas. -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- El título de la página se puede cambiar desde otras plantillas. -->
+    <title>{% block title %}Galería de Fotos{% endblock %}</title>
+    <!-- Enlace a Bootstrap para los estilos. -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bloque para estilos adicionales específicos de cada página. -->
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- Barra de navegación superior. -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Galería</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('subir') }}">Subir Foto</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('acerca') }}">Acerca de</a></li>
+            </ul>
+            <!-- Menú de usuario a la derecha. -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Si el usuario ha iniciado sesión, muestra su nombre y un enlace para cerrar sesión. -->
+                {% if 'username' in session %}
+                    {% if session['role'] == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Admin</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Hola, {{ session['username'] }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+                    </li>
+                <!-- Si no, muestra enlaces para iniciar sesión y registrarse. -->
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">Registrarse</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenedor principal para el contenido de la página. -->
+    <div class="container mt-4">
+        <!-- Muestra los mensajes flash (notificaciones) que se envían desde Flask. -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <!-- Aquí es donde se insertará el contenido principal de cada página. -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Scripts de JavaScript. -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

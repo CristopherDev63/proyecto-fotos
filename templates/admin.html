@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Administrador{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Panel de Administrador</h1>
+    <h2 class="h4">Imágenes Pendientes de Aprobación</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if imagenes %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Miniatura</th>
+                        <th scope="col">Nombre de Archivo</th>
+                        <th scope="col">Subido por</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for imagen in imagenes %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>
+                                <a href="{{ url_for('static', filename='images/' + imagen.filename) }}" target="_blank">
+                                    <img src="{{ url_for('static', filename='images/' + imagen.filename) }}" alt="{{ imagen.filename }}" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                                </a>
+                            </td>
+                            <td>{{ imagen.filename }}</td>
+                            <td>{{ imagen.author.username }}</td>
+                            <td>
+                                <a href="{{ url_for('approve_image', image_id=imagen.id) }}" class="btn btn-success btn-sm">Aprobar</a>
+                                <a href="{{ url_for('reject_image', image_id=imagen.id) }}" class="btn btn-danger btn-sm">Rechazar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            No hay imágenes pendientes de aprobación en este momento.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
