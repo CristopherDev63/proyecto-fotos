@@ -63,14 +63,12 @@ class Image(db.Model):
     status = db.Column(db.String(20), nullable=False, default='pending')  # Estado de la imagen (pending, approved, rejected)
 
 
-# --- Comando para inicializar la BD ---
-# Esto crea un comando que podemos ejecutar desde la terminal para crear las tablas.
-# Ejemplo: "flask init-db"
-@app.cli.command("init-db")
-def init_db_command():
-    """Crea las tablas de la base de datos."""
+# --- Inicialización de la BD ---
+@app.before_request
+def create_tables():
+    # Crea las tablas de la base de datos si no existen.
+    # Esto se ejecuta antes de la primera petición a la aplicación.
     db.create_all()
-    print("Base de datos inicializada.")
 
 
 # --- Rutas de la Aplicación ---
