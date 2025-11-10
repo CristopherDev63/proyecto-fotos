@@ -23,8 +23,14 @@ app.config['UPLOAD_FOLDER'] = 'static/images'
 # Tamaño máximo de los archivos que se pueden subir (16 MB).
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-# Ruta a la base de datos SQLite.
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/cristopherrobledo/Documents/programacion/universidad/cuatrimestre-3/orientacion-objetos/proyecto-fotos/database.db'
+# Ruta a la base de datos. Usa la variable de entorno POSTGRES_URL si está disponible (para Vercel),
+# si no, usa la base de datos local sqlite.
+db_uri = os.environ.get('POSTGRES_URL')
+if db_uri and db_uri.startswith("postgres://"):
+    db_uri = db_uri.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri or 'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), 'database.db')
+
 
 # Desactiva una función de SQLAlchemy que no necesitamos y que consume recursos.
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
